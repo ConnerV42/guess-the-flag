@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Game.css";
+import FlagQuestion from "./FlagQuestion";
 
 class Game extends Component { // owns state about what you get back from api 
     constructor(props) {
@@ -11,6 +12,9 @@ class Game extends Component { // owns state about what you get back from api
             correctOption: undefined,
             questionState: undefined
         }
+
+        this.onGuess = this.onGuess.bind(this);
+        this.nextQuestion = this.nextQuestion.bind(this);
     }
 
     componentDidMount() {
@@ -22,32 +26,72 @@ class Game extends Component { // owns state about what you get back from api
                 this.setState({
                     countries: countries,
                     options: options,
-                    correctOption: correctOption
+                    correctOption: correctOption,
+                    questionState: QuestionStates.QUESTION
                 });
-            });
+            })
+            .catch(console.warn);
     }
+
+    // onGuess(answer)
+
+    // nextQuestion()
 
     getOptions(correctOption, countries) {
-        const options = [];
+        const options = [correctOption];
 
-        // Fill options array with 4 random countries
-        for (let i = 0; i < 4; i++) {
-            options[i] = Math.floor(Math.random() * countries.length);
+        let tries = 0;
+        while (options.length < 4 && tries < 15) {
+            let option = Math.floor(Math.random() * countries.length);
+            if (options.indexOf(option) === -1) {
+                options.push(option);
+            } else {
+                tries++;
+            }
         }
-
-        // Select a random index in the options array and fill
-        const index = Math.floor(Math.random() * options.length);
-        options[index] = correctOption;
-    }
+        return options; // options is an array of index'es that correspond to 4 choices in
+    }                   // the countries array
 
     render() {
         const style = {
             marginTop: "15px"
         };
 
+        let {
+            countries,
+            correctOption,
+            options,
+            questionState
+        } = this.state;
+
+        let output = <div>Loading...</div>;
+
+        if (countries !== undefined) {
+            const name = countries[correctOption].name;
+            const flag = countries[correctOption].flag;
+
+            let choices = options.map(choice => {
+                return {
+                    id: choice,
+                    name: countries[choice].name
+                }
+            });
+
+            output = (
+                <FlagQuestion
+                    answerText={name}
+                    onGuess={this.onGuess}
+                    onNext={this.nextQuestion}
+                    options={choices}
+                    questionState={questionState}
+                    flag={flag}
+                />
+            )
+        }
+
         return (
             <div className="Game" style={style}>
-
+                {output}
             </div>
         )
     }
