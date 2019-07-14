@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import FlagQuestion, { QuestionStates } from "./FlagQuestion.js";
+import shuffle from "shuffle-array";
 import "./Game.css";
-import FlagQuestion from "./FlagQuestion";
 
 class Game extends Component { // owns state about what you get back from api 
     constructor(props) {
@@ -21,25 +22,39 @@ class Game extends Component { // owns state about what you get back from api
         fetch("https://restcountries.eu/rest/v2/all")
             .then(data => data.json())
             .then(countries => {
-                const correctOption = countries[Math.floor(Math.random() * countries.length)];
+                const correctOption = Math.floor(Math.random() * countries.length);
                 const options = this.getOptions(correctOption, countries);
                 this.setState({
-                    countries: countries,
-                    options: options,
-                    correctOption: correctOption,
+                    countries,
+                    correctOption,
+                    options,
                     questionState: QuestionStates.QUESTION
                 });
             })
             .catch(console.warn);
     }
 
-    // onGuess(answer)
+    onGuess(answer) {
+        const { correctOption } = this.state;
+        let questionState = answer === correctOption ?
+            QuestionStates.CORRECT :
+            QuestionStates.INCORRECT;
+        this.setState({ questionState });
+    }
 
-    // nextQuestion()
+    nextQuestion() {
+        const { countries } = this.state;
+        const correctOption = Math.floor(Math.random() * countries.length);
+        const options = this.getOptions(correctOption, countries);
+        this.setState({
+            correctOption,
+            options,
+            questionState: QuestionStates.QUESTION
+        });
+    }
 
     getOptions(correctOption, countries) {
-        const options = [correctOption];
-
+        let options = [correctOption];
         let tries = 0;
         while (options.length < 4 && tries < 15) {
             let option = Math.floor(Math.random() * countries.length);
@@ -49,14 +64,13 @@ class Game extends Component { // owns state about what you get back from api
                 tries++;
             }
         }
-        return options; // options is an array of index'es that correspond to 4 choices in
-    }                   // the countries array
+        return shuffle(options); // options is an array of index'es chosen from countries array
+    }
 
     render() {
         const style = {
             marginTop: "15px"
         };
-
         let {
             countries,
             correctOption,
@@ -65,15 +79,13 @@ class Game extends Component { // owns state about what you get back from api
         } = this.state;
 
         let output = <div>Loading...</div>;
+        if (correctOption !== undefined) {
+            const { name, flag } = countries[correctOption];
 
-        if (countries !== undefined) {
-            const name = countries[correctOption].name;
-            const flag = countries[correctOption].flag;
-
-            let choices = options.map(choice => {
+            let choices = options.map(i => {
                 return {
-                    id: choice,
-                    name: countries[choice].name
+                    id: i,
+                    name: countries[i].name
                 }
             });
 
@@ -86,17 +98,13 @@ class Game extends Component { // owns state about what you get back from api
                     questionState={questionState}
                     flag={flag}
                 />
-            )
+            );
         }
-
         return (
             <div className="Game" style={style}>
                 {output}
             </div>
-        )
+        );
     }
-
-
 }
-
 export default Game;
