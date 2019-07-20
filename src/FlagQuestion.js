@@ -57,8 +57,6 @@ class FlagQuestion extends Component {
                 answer={answerText}
                 onNext={onNext} />);
 
-        //#svgView(viewBox(0,0,100,100))
-
         return (
             <div className="flag-question">
                 <img
