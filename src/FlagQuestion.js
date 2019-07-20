@@ -57,14 +57,16 @@ class FlagQuestion extends Component {
                 answer={answerText}
                 onNext={onNext} />);
 
+        //#svgView(viewBox(0,0,100,100))
+
         return (
             <div className="flag-question">
-                {output}
                 <img
                     className="flag-img"
                     src={flag}
                     alt="Guess the flag"
                 />
+                {output}
             </div>
         );
     }

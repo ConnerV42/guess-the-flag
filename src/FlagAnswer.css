@@ -1,0 +1,23 @@
+.flag-answer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.text {
+    margin-bottom: 1%;
+}
+
+@media (max-width: 500px) {
+    .flag-answer {
+        padding: 25% 0 5% 0;
+        margin-top: auto;
+        justify-content: flex-end;
+    }
+
+    .text {
+        margin-bottom: 5%;
+    }
+}

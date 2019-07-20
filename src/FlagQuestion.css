@@ -1,0 +1,27 @@
+.flag-question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flag-img {
+    margin: 2% 0 1% 0;
+    border: 2px solid black;
+    width: 35%;
+    height: 30%;
+}
+
+@media (max-width: 500px) {
+    .flag-question {
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: auto;
+    }
+
+    .flag-img {
+        margin-top: 15%;
+        border: 2px solid black;
+        width: 80%;
+        height: 25%;
+    }
+}

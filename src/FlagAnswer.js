@@ -4,11 +4,13 @@ import './FlagAnswer.css';
 
 const FlagAnswer = ({ correct, answer, onNext }) => (
     <div className='flag-answer'>
-        {correct ?
-            `Correct! ${answer}` :
-            `Incorrect! Correct Answer: ${answer}`}
+        <div className='text'>
+            {correct ?
+                `Correct! ${answer}` :
+                `Incorrect! Correct Answer: ${answer}`}
+        </div>
         <StyledButton text="NEXT" onClick={onNext} />
-    </div>
+    </div >
 );
 
 export default FlagAnswer;

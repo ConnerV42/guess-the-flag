@@ -3,7 +3,6 @@ import StyledButton from './StyledButton';
 import './FlagChoices.css';
 
 const FlagChoices = props => {
-    debugger;
     let choices = props.options || [];
     const { handleChange, handleSubmit } = props;
     let inputs = choices.map(i => (
@@ -19,7 +18,9 @@ const FlagChoices = props => {
 
     return (
         <form className="flag-form" onSubmit={handleSubmit}>
-            {inputs}
+            <div className="flag-inputs">
+                {inputs}
+            </div>
             <StyledButton text="GUESS" type="submit" />
         </form>
     );

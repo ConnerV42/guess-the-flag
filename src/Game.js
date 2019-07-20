@@ -68,9 +68,6 @@ class Game extends Component { // owns state about what you get back from api
     }
 
     render() {
-        const style = {
-            marginTop: "15px"
-        };
         let {
             countries,
             correctOption,
@@ -101,7 +98,7 @@ class Game extends Component { // owns state about what you get back from api
             );
         }
         return (
-            <div className="Game" style={style}>
+            <div className="Game">
                 {output}
             </div>
         );
